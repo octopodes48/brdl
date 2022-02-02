@@ -28,7 +28,7 @@ class SignUp extends Component {
           <p>Create a brdl account and get started today!</p>
         </header>
 
-        <form action="" onSubmit={e => this.props.handleAccountSubmit(e)}>
+        <form action="" onSubmit={e => {e.preventDefault() ; this.props.handleAccountSubmit(e)}}>
           <label htmlFor="username">
             <p>Create a username:</p>
             <input

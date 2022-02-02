@@ -44,7 +44,7 @@ export const createAccountSubmitActionCreator = (e, mode, serverRes) => ({
 });
 
 export const handleAccountSubmit = (e) => (dispatch, getState) => {
-  e.preventDefault();
+  // e.preventDefault();
   const mode = getState().responses.mode;
   const valid = getState().responses.signUpPost.valid;
   const { username, password, fullName } = getState().textField;

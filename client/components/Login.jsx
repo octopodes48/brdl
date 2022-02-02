@@ -28,7 +28,7 @@ class Login extends Component {
           <p>Sign in and get brdling!</p>
         </header>
 
-        <form key="li-form" action="" onSubmit={e => this.handleAccountSubmit(e)}>
+        <form key="li-form" action="" onSubmit={e => this.props.handleAccountLogin(e)}>
           <label htmlFor="username">
             <p>Username:</p>
             <input

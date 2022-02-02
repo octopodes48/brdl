@@ -38,7 +38,7 @@ userController.auth = async (req, res, next) => {
 // else set res.locals.auth to false if username already exists
 userController.create = async (req, res, next) => {
   console.log('in usercontroller create');
-  
+  console.log('req.query', req.query)
   let { fullName, username: clientUsername, password: clientPassword } = req.query;
     // $1: fullName, $2: username: clientUsername, $3: password: clientPassword
   try {
@@ -51,16 +51,20 @@ userController.create = async (req, res, next) => {
       return next();
     } else {
       const saltRounds = 15;
-      bcrypt.genSalt(saltRounds, async (err, salt) => {
-        const hashPass = await bcrypt.hash(clientPassword, salt)
-        return clientPassword = hashPass
-      })
-      const queryString = 'INSERT INTO Users (name, username, password) VALUES ($1, $2, $3)';
-      console.log('queryString', queryString)
-      const queryResult = await db.query(queryString, [fullName, clientUsername, clientPassword]);
-      res.locals.auth = { valid: true }; // I'm still here... MUAHAHAHAHA!!!!! -> Left by Aram P.
-      console.log('account succcessfully made');
-      return next();
+        await bcrypt.hash(clientPassword, saltRounds, (err, hash) => {
+          const queryString = 'INSERT INTO Users (name, username, password) VALUES ($1, $2, $3)';
+          const queryResult = db.query(queryString, [fullName, clientUsername, hash]);
+
+          res.locals.auth = { valid: true };
+          return next()
+        
+        }
+        
+        )
+      // res.locals.auth = { valid: true };
+      // console.log('account succcessfully made');
+      // return next();
+ 
     }
   } catch (err) {
     return next({
