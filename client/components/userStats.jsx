@@ -126,7 +126,7 @@ class UserStats extends Component {
         if (!birdSeen)
           display.push(
             <button className="btn" key={`key${ind}`} onClick={e => this.newSeenBird(bird.sciName)}>
-              I saw {bird.sciName}!!!
+              I saw {bird.sciName}!
             </button>
           );
       });
