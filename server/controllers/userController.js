@@ -1,5 +1,6 @@
 const { query } = require('express');
 const db = require('../models/brdlModels');
+const bcrypt = require('bcrypt');
 
 const userController = {};
 
@@ -8,6 +9,7 @@ const userController = {};
 // else set res.locals.auth
 userController.auth = async (req, res, next) => {
   const { username: clientUsername, password: clientPassword } = req.query;
+  console.log(req.query.password)
   try {
     const queryString = 'SELECT * FROM Users WHERE username=$1';
     const queryResult = await db.query(queryString, [clientUsername]);
@@ -29,26 +31,35 @@ userController.auth = async (req, res, next) => {
   }
 };
 
+
+
 // client will provide a unique username and a password in req.query
 // we will query database with both the username and password. If the db does not contain username, it will store the username and password and set res.locals.auth = true
 // else set res.locals.auth to false if username already exists
 userController.create = async (req, res, next) => {
   console.log('in usercontroller create');
-  const { fullName, username: clientUsername, password: clientPassword } = req.query;
+  
+  let { fullName, username: clientUsername, password: clientPassword } = req.query;
+    // $1: fullName, $2: username: clientUsername, $3: password: clientPassword
   try {
     const queryCheckString = 'SELECT * FROM Users WHERE username=$1';
     const queryCheckResult = await db.query(queryCheckString, [clientUsername]);
     if (queryCheckResult.rows.length > 0) {
-      console.log('query check result',queryCheckResult);
+      // console.log('query check result',queryCheckResult);
       res.locals.auth = { valid: false };
       console.log('username already exist');
       return next();
     } else {
+      const saltRounds = 15;
+      bcrypt.genSalt(saltRounds, async (err, salt) => {
+        const hashPass = await bcrypt.hash(clientPassword, salt)
+        return clientPassword = hashPass
+      })
       const queryString = 'INSERT INTO Users (name, username, password) VALUES ($1, $2, $3)';
+      console.log('queryString', queryString)
       const queryResult = await db.query(queryString, [fullName, clientUsername, clientPassword]);
-      res.locals.auth = { valid: true };
+      res.locals.auth = { valid: true }; // I'm still here... MUAHAHAHAHA!!!!! -> Left by Aram P.
       console.log('account succcessfully made');
-      console.log(queryResult);
       return next();
     }
   } catch (err) {
@@ -61,3 +72,4 @@ userController.create = async (req, res, next) => {
 };
 
 module.exports = userController;
+
