@@ -56,7 +56,9 @@ export const handleAccountSubmit = (e) => (dispatch, getState) => {
     fetch(`http://localhost:3000/gainAccess/?username=${username}&password=${password}&fullName=${fullName}`, {
         method: 'POST',
         header: { 'Access-Control-Allow-Origin': ' * ', 'Content-Type': 'application/json' },
-    })
+    }) // BUAHAHAHAHAHAHAHAHAHAHA
+    // WHY ARE YOU HERE!
+    // BOO HISS!
       .then(res => res.json())
       .then(data => {
         if (data.valid) dispatch(changeToProfilePageActionCreator());

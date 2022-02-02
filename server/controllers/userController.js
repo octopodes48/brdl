@@ -56,6 +56,8 @@ userController.create = async (req, res, next) => {
           const queryResult = db.query(queryString, [fullName, clientUsername, hash]);
 
           res.locals.auth = { valid: true };
+          res.locals.user = {username: clientUsername}
+          console.log(res.locals.user.username)
           return next()
         
         }
