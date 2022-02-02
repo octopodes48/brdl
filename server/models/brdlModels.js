@@ -1,4 +1,4 @@
-const tokens = require('../tokens/tokens');
+const tokens = require('../tokens/keys');
 
 const { Pool } = require('pg');
 

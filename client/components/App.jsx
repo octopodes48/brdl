@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../redux/actions/actions.js';
+import * as actions from '../actions/actions.js';
 import SignUp from './SignUp.jsx';
 import Login from './Login.jsx';
 import Navbar from './NavBar.jsx';

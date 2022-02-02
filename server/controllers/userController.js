@@ -35,6 +35,7 @@ userController.auth = async (req, res, next) => {
 userController.create = async (req, res, next) => {
   console.log('in usercontroller create');
   const { fullName, username: clientUsername, password: clientPassword } = req.query;
+  console.log('req.query', req.query)
   try {
     const queryCheckString = 'SELECT * FROM Users WHERE username=$1';
     const queryCheckResult = await db.query(queryCheckString, [clientUsername]);

@@ -1,9 +1,9 @@
 // import path from 'path';
 import React, { Component } from 'react';
 
-import LogoIcon from '../../../assets/img/brdl-logo-2-b.png';
-import LogoText from '../../../assets/img/brdl-logo-2-c.png';
-import * as actions from '../../redux/actions/actions.js';
+import LogoIcon from '../../assets/img/brdl-logo-2-b.png';
+import LogoText from '../../assets/img/brdl-logo-2-c.png';
+import * as actions from '../actions/actions.js';
 
 // const img = require('')
 

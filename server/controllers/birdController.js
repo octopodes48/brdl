@@ -1,7 +1,7 @@
 const { query } = require('express');
 const db = require('../models/brdlModels');
 const axios = require('axios');
-const tokens = require('../tokens/tokens');
+const tokens = require('../tokens/keys');
 
 const birdController = {};
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../redux/actions/actions.js';
+import * as actions from '../actions/actions.js';
+import path from 'path';
 // import birdies from '../../../assets/img/brdl-logo-6-a.png';
 
 const displayMessage = [];
@@ -41,7 +42,7 @@ class SignUp extends Component {
       else this.props.createAccountSubmitActionCreator();
     } else {
       // queryRes = actual server query
-      const url = `http://localhost:3000/gainAccess/?username=${this.props.username}&password=${this.props.username}&fullName=${this.props.fullName}`;
+      const url = path.resolve(__dirname, `/gainAccess/?username=${this.props.username}&password=${this.props.username}&fullName=${this.props.fullName}`);
       const options = {
         method: 'POST',
         header: { 'Access-Control-Allow-Origin': ' * ', 'Content-Type': 'application/json' },
