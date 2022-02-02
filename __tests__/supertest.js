@@ -17,6 +17,7 @@ describe('Controllers', () => {
   afterAll(() => {
     const deleteUser = 'DELETE FROM Users WHERE username=\'jest\'';
     db.query(deleteUser)
+      .catch((err))
   });
   
   describe('Create User', () => {
@@ -24,18 +25,21 @@ describe('Controllers', () => {
       .get(`/gainAccess`)
       .expect(200)
       .expect('Content-Type', /application\/json/)
+      .catch((err) => { console.log(err) })
     );
 
     it('should successfully create a new user', () => request(server)
       .post('/gainAccess?fullName=jest&username=jest&password=jest')
       .expect(200)
       .then((res) => expect(res.body).toEqual({ valid: true }))
+      .catch((err) => { console.log(err) })
     );
 
     it('should return false if user already exists', () => request(server)
-    .post('/gainAccess?fullName=jest&username=jest&password=jest')
-    .expect(200)
-    .then((res) => expect(res.body).toEqual({ valid: false }))
+      .post('/gainAccess?fullName=jest&username=jest&password=jest')
+      .expect(200)
+      .then((res) => expect(res.body).toEqual({ valid: false }))
+      .catch((err) => { console.log(err) })
     );
   });
 
@@ -44,6 +48,7 @@ describe('Controllers', () => {
       .get('/gainAccess?fullName=jest&username=jest&password=jest')
       .expect('Content-Type', /application\/json/)
       .expect(200)
+      .catch((err) => { console.log(err) })
     );
 
     it('should successfully authorize a user', () => request(server)
@@ -51,13 +56,15 @@ describe('Controllers', () => {
       .send(query)
       .expect(200)
       .then((res) => expect(res.body.valid).toEqual(true))
+      .catch((err) => { console.log(err) })
     );
 
     it('should fail to authorize a non-existant user', () => request(server)
-    .get('/gainAccess?fullName=jest&username=noJest&password=jest')
-    .send(query)
-    .expect(200)
-    .then((res) => expect(res.body.valid).toEqual(false))
+      .get('/gainAccess?fullName=jest&username=noJest&password=jest')
+      .send(query)
+      .expect(200)
+      .then((res) => expect(res.body.valid).toEqual(false))
+      .catch((err) => { console.log(err) })
   );
   });
 });
