@@ -55,7 +55,8 @@ export const handleAccountSubmit = (e) => (dispatch, getState) => {
   } else {  // Should the second username be password?
     fetch(`http://localhost:3000/gainAccess/?username=${username}&password=${password}&fullName=${fullName}`, {
         method: 'POST',
-        header: { 'Access-Control-Allow-Origin': ' * ', 'Content-Type': 'application/json' },
+        header: { 'Access-Control-Allow-Origin' : ' * ', 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials' : 'true' },
+        // credentials: "include"
     }) // BUAHAHAHAHAHAHAHAHAHAHA
     // WHY ARE YOU HERE!
     // BOO HISS!
@@ -80,6 +81,7 @@ export const handleAccountLogin = (e) => (dispatch, getState) => {
       method: 'GET',
       header: {
         'Access-Control-Allow-Origin': ' * ',
+        'Access-Control-Allow-Credentials' : 'true',
         'Content-Type': 'application/json',
         Accept: 'application/json', // string? necessary?
       },
@@ -90,6 +92,7 @@ export const handleAccountLogin = (e) => (dispatch, getState) => {
         else dispatch(loginSubmitActionCreator());
       });
   }
+
 }
 
 export const changeToSignUpPageActionCreator = () => ({

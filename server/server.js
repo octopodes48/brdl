@@ -5,15 +5,19 @@ const path = require('path'),
   
 const cookieParser = require('cookie-parser');
 
+
 const userController = require('./controllers/userController');
 const geoController = require('./controllers/geoController');
 const birdController = require('./controllers/birdController');
 const cookieController = require('./controllers/cookieController')
 const sessionController = require('./controllers/sessionController')
-const session = require('express-session')
 
 app.use(express.json()); // replaces body-parser
 app.use(express.urlencoded({ extended: true })); // Helps parse different data types
+
+
+
+
 
 // handle GET & POST requests to /gainAccess
 
@@ -38,12 +42,15 @@ app.use(cookieParser());
 app.post('/gainAccess',
   userController.create,
   sessionController.startSession,
-  // cookieController.setSSIDCookie,
+  cookieController.setSSIDCookie,
   (req, res) => {
   res.set('Access-Control-Allow-Origin', ' * ');
   res.set('Content-Type', 'application/json');
-
-  res.status(200).json(res.locals.auth);
+  // res.set('header')
+  // res.setHeader('Set-Cookie', 'cookie=value');
+  
+  // res.cookie('ssid', res.locals.rows[0].sessionid, {httpOnly: true, secure: true})
+  return res.status(200).json(res.locals.auth);
 });
 
 // User profile - get local birds in current area
@@ -57,7 +64,7 @@ app.get('/profile', birdController.nearby, (req, res) => {
 });
 
 app.post('/profile', birdController.seen, (req,res) => {
-  res.set('Access-Control-Allow-Origin', ' * ');
+  // res.set('Access-Control-Allow-Origin', ' http://localhost:3000 ');
   res.set('Content-Type', 'application/json');
   
   res.status(200).json(res.locals.seen);
@@ -80,7 +87,7 @@ app.use((err, req, res, next) => {
   const errorObj = Object.assign({}, defaultErr, err);
   console.log(errorObj.log);
 
-  res.set('Access-Control-Allow-Origin', ' * ');
+  // res.set('Access-Control-Allow-Origin', ' http://localhost:3000 ');
   res.set('Content-Type', 'application/json');
 
   return res.status(errorObj.status).json(errorObj.message);

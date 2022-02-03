@@ -10,6 +10,11 @@ const userController = {};
 userController.auth = async (req, res, next) => {
   const { username: clientUsername, password: clientPassword } = req.query;
   console.log(req.query.password)
+  
+  // const saltRounds = 15
+  // const inputPW = await bcrypt.hash(clientPassword, saltRounds)
+  // clientPassword = inputPW
+
   try {
     const queryString = 'SELECT * FROM Users WHERE username=$1';
     const queryResult = await db.query(queryString, [clientUsername]);
@@ -56,7 +61,6 @@ userController.create = async (req, res, next) => {
         
       clientPassword = hashPW
 
-      console.log(clientPassword)
       const queryString = 'INSERT INTO Users (name, username, password) VALUES ($1, $2, $3)';
       const queryResult = await db.query(queryString, [fullName, clientUsername, clientPassword]);
         

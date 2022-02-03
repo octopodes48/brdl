@@ -11,9 +11,10 @@ cookieController.setSSIDCookie = (req, res, next) => {
     // const queryString = 'SELECT * FROM Users'
     // const queryResult = await db.query(queryString)
     // console.log('queryResult', queryResult)
-    res.cookie('ssid', res.locals.user.username, { httpOnly: true, secure: true })
+    
+    res.cookie('ssid', `${res.locals.uuid.rows[0].sessionid}`, { httpOnly: true})
 
-    console.log('it ran!!', res.cookie)
+    console.log('it ran!!')
     return next();
   }
 
