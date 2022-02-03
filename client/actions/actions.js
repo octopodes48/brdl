@@ -73,7 +73,8 @@ export const handleAccountLogin = (e) => (dispatch, getState) => {
   const mode = getState().responses.mode;
   const { username, password } = getState().textField;
 
-  if (this.props.mode === 'dev') {
+  // if (this.props.mode === 'dev') {
+  if (mode === 'dev') {
     if (valid) dispatch(changeToProfilePageActionCreator());
     else dispatch(loginSubmitActionCreator());
   } else {
@@ -84,6 +85,7 @@ export const handleAccountLogin = (e) => (dispatch, getState) => {
         'Access-Control-Allow-Credentials' : 'true',
         'Content-Type': 'application/json',
         Accept: 'application/json', // string? necessary?
+        credentials: 'include'
       },
     })
       .then(res => res.json())

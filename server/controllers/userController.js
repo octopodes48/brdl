@@ -24,7 +24,8 @@ userController.auth = async (req, res, next) => {
       return next();
     } else {
       res.locals.auth = { valid: true, fullName: queryResult.rows[0].name };
-      console.log(`Auth success using username: ${clientUsername} and password: ${clientPassword}`);
+      // console.log(`Auth success using username: ${clientUsername} and password: ${clientPassword}`);
+      // console.log('Successfully logged in.');
       return next();
     }
   } catch (err) {
@@ -63,18 +64,6 @@ userController.create = async (req, res, next) => {
 
       const queryString = 'INSERT INTO Users (name, username, password) VALUES ($1, $2, $3)';
       const queryResult = await db.query(queryString, [fullName, clientUsername, clientPassword]);
-        
-        // const hashPW = await bcrypt.hash(clientPassword, saltRounds, (err, hash) => {
-        //     if (err) return next(err)
-        //     const queryString = 'INSERT INTO Users (name, username, password) VALUES ($1, $2, $3)';
-        //     const queryResult = db.query(queryString, [fullName, clientUsername, hash]);
-
-        //     res.locals.auth = { valid: true };
-        //     res.locals.user = {username: clientUsername}
-        //     // console.log('finished hashing')
-        //     return next();
-        // })
-        
    
       
       res.locals.auth = { valid: true };

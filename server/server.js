@@ -33,12 +33,14 @@ app.use(express.urlencoded({ extended: true })); // Helps parse different data t
 // middleware will return a boolean.
 // if false, res.send('Login credentials are invalid')
 // else, direct user to the profile page
-app.get('/gainAccess', userController.auth, (req, res) => {
-  res.set('Access-Control-Allow-Origin', ' http://localhost:8080 ');
-  res.set('Access-Control-Allow-Credentials: true');
-  res.set('Content-Type', 'application/json');
+app.get('/gainAccess',
+  userController.auth,
+  (req, res) => {
+    res.set('Access-Control-Allow-Origin', ' http://localhost:8080 ');
+    res.set('Access-Control-Allow-Credentials: true');
+    res.set('Content-Type', 'application/json');
 
-  res.status(200).json(res.locals.auth);
+    res.status(200).json(res.locals.auth);
 });
 
 app.use(cookieParser());
@@ -53,42 +55,47 @@ app.post('/gainAccess',
   sessionController.startSession,
   cookieController.setSSIDCookie,
   (req, res) => {
-  res.set('Access-Control-Allow-Origin', ' http://localhost:8080 ');
-  res.set('Access-Control-Allow-Credentials: true');
-  res.set('Content-Type', 'application/json');
-  // res.set('header')
-  // res.setHeader('Set-Cookie', 'cookie=value');
-  
-  // res.cookie('ssid', res.locals.rows[0].sessionid, {httpOnly: true, secure: true})
-  return res.status(200).json(res.locals.auth);
+    res.set('Access-Control-Allow-Origin', ' http://localhost:8080 ');
+    res.set('Access-Control-Allow-Credentials: true');
+    res.set('Content-Type', 'application/json');
+    // res.set('header')
+    // res.setHeader('Set-Cookie', 'cookie=value');
+    
+    // res.cookie('ssid', res.locals.rows[0].sessionid, {httpOnly: true, secure: true})
+    return res.status(200).json(res.locals.auth);
 });
 
 // User profile - get local birds in current area
 // client will send a GET request to /profile with { username: value, lat: value, long: value }
 // for 10 birds, mw will return { birds: [{sciName: "", locName: ""}, {...}]}
-app.get('/profile', birdController.nearby, (req, res) => {
-  res.set('Access-Control-Allow-Origin', ' http://localhost:8080 ');
-  res.set('Access-Control-Allow-Credentials: true');
-  res.set('Content-Type', 'application/json');
+app.get('/profile',
+  birdController.nearby,
+  (req, res) => {
+    res.set('Access-Control-Allow-Origin', ' http://localhost:8080 ');
+    res.set('Access-Control-Allow-Credentials: true');
+    res.set('Content-Type', 'application/json');
 
-  res.status(200).json(res.locals.nearby);
+    res.status(200).json(res.locals.nearby);
 });
 
-app.post('/profile', birdController.seen, (req,res) => {
-  res.set('Access-Control-Allow-Origin', ' http://localhost:8080 ');
-  res.set('Access-Control-Allow-Credentials: true');
-  res.set('Content-Type', 'application/json');
-  
-  res.status(200).json(res.locals.seen);
+app.post('/profile',
+  birdController.seen,
+  (req,res) => {
+    res.set('Access-Control-Allow-Origin', ' http://localhost:8080 ');
+    res.set('Access-Control-Allow-Credentials: true');
+    res.set('Content-Type', 'application/json');
+    
+    res.status(200).json(res.locals.seen);
 })
 
 // Local error handler (404/missing routes)
-app.use('*', (req, res) => {
-  res.set('Access-Control-Allow-Origin', ' http://localhost:8080 ');
-  res.set('Access-Control-Allow-Credentials: true');
-  res.set('Content-Type', 'application/json');
+app.use('*',
+  (req, res) => {
+    res.set('Access-Control-Allow-Origin', ' http://localhost:8080 ');
+    res.set('Access-Control-Allow-Credentials: true');
+    res.set('Content-Type', 'application/json');
 
-  res.status(404).send('PAGE NOT FOUND!!!');
+    res.status(404).send('PAGE NOT FOUND!!!');
 });
 // Global error handler (middleware errors)
 app.use((err, req, res, next) => {
@@ -97,10 +104,12 @@ app.use((err, req, res, next) => {
     status: 500,
     message: { err: 'Express error handler caught unknown middleware error' },
   };
+
   const errorObj = Object.assign({}, defaultErr, err);
   console.log(errorObj.log);
 
-  // res.set('Access-Control-Allow-Origin', ' http://localhost:3000 ');
+  // res.set('Access-Control-Allow-Origin', ' http://localhost:8080 ');
+  // res.set('Access-Control-Allow-Credentials: true');
   res.set('Content-Type', 'application/json');
 
   return res.status(errorObj.status).json(errorObj.message);
