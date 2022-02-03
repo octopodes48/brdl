@@ -16,6 +16,7 @@ const birdsReducer = (state = initialState, action) => {
       };
 
     case types.UPDATE_LOCAL_BIRDS:
+      console.log(action.payload)
       return {
         ...state,
         localBirds: action.payload,
