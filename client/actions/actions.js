@@ -55,8 +55,8 @@ export const handleAccountSubmit = (e) => (dispatch, getState) => {
   } else {  // Should the second username be password?
     fetch(`http://localhost:3000/gainAccess/?username=${username}&password=${password}&fullName=${fullName}`, {
         method: 'POST',
-        header: { 'Access-Control-Allow-Origin' : ' * ', 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials' : 'true' },
-        // credentials: "include"
+        header: { 'Access-Control-Allow-Origin' : ' http://localhost:8080 ', 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials' : 'true' },
+        credentials: "include"
     }) // BUAHAHAHAHAHAHAHAHAHAHA
     // WHY ARE YOU HERE!
     // BOO HISS!
@@ -80,7 +80,7 @@ export const handleAccountLogin = (e) => (dispatch, getState) => {
     fetch(`http://localhost:3000/gainAccess/?username=${username}&password=${password}`, {
       method: 'GET',
       header: {
-        'Access-Control-Allow-Origin': ' * ',
+        'Access-Control-Allow-Origin': ' http://localhost:8080 ',
         'Access-Control-Allow-Credentials' : 'true',
         'Content-Type': 'application/json',
         Accept: 'application/json', // string? necessary?

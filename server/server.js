@@ -11,6 +11,14 @@ const geoController = require('./controllers/geoController');
 const birdController = require('./controllers/birdController');
 const cookieController = require('./controllers/cookieController')
 const sessionController = require('./controllers/sessionController')
+const cors = require('cors')
+
+var corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials:  true
+}
+
+app.use(cors(corsOptions))
 
 app.use(express.json()); // replaces body-parser
 app.use(express.urlencoded({ extended: true })); // Helps parse different data types
@@ -26,7 +34,8 @@ app.use(express.urlencoded({ extended: true })); // Helps parse different data t
 // if false, res.send('Login credentials are invalid')
 // else, direct user to the profile page
 app.get('/gainAccess', userController.auth, (req, res) => {
-  res.set('Access-Control-Allow-Origin', ' * ');
+  res.set('Access-Control-Allow-Origin', ' http://localhost:8080 ');
+  res.set('Access-Control-Allow-Credentials: true');
   res.set('Content-Type', 'application/json');
 
   res.status(200).json(res.locals.auth);
@@ -44,7 +53,8 @@ app.post('/gainAccess',
   sessionController.startSession,
   cookieController.setSSIDCookie,
   (req, res) => {
-  res.set('Access-Control-Allow-Origin', ' * ');
+  res.set('Access-Control-Allow-Origin', ' http://localhost:8080 ');
+  res.set('Access-Control-Allow-Credentials: true');
   res.set('Content-Type', 'application/json');
   // res.set('header')
   // res.setHeader('Set-Cookie', 'cookie=value');
@@ -57,14 +67,16 @@ app.post('/gainAccess',
 // client will send a GET request to /profile with { username: value, lat: value, long: value }
 // for 10 birds, mw will return { birds: [{sciName: "", locName: ""}, {...}]}
 app.get('/profile', birdController.nearby, (req, res) => {
-  res.set('Access-Control-Allow-Origin', ' * ');
+  res.set('Access-Control-Allow-Origin', ' http://localhost:8080 ');
+  res.set('Access-Control-Allow-Credentials: true');
   res.set('Content-Type', 'application/json');
 
   res.status(200).json(res.locals.nearby);
 });
 
 app.post('/profile', birdController.seen, (req,res) => {
-  // res.set('Access-Control-Allow-Origin', ' http://localhost:3000 ');
+  res.set('Access-Control-Allow-Origin', ' http://localhost:8080 ');
+  res.set('Access-Control-Allow-Credentials: true');
   res.set('Content-Type', 'application/json');
   
   res.status(200).json(res.locals.seen);
@@ -72,7 +84,8 @@ app.post('/profile', birdController.seen, (req,res) => {
 
 // Local error handler (404/missing routes)
 app.use('*', (req, res) => {
-  res.set('Access-Control-Allow-Origin', ' * ');
+  res.set('Access-Control-Allow-Origin', ' http://localhost:8080 ');
+  res.set('Access-Control-Allow-Credentials: true');
   res.set('Content-Type', 'application/json');
 
   res.status(404).send('PAGE NOT FOUND!!!');
