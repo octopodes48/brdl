@@ -21,7 +21,8 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const getAuth = async (url) => {
-  const data = await fetch
+  const data = await fetch(url)
+  return data
 }
 
 class App extends Component {
