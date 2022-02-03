@@ -57,7 +57,6 @@ userController.create = async (req, res, next) => {
 
           res.locals.auth = { valid: true };
           res.locals.user = {username: clientUsername}
-          console.log(res.locals.user.username)
           return next()
         
         }

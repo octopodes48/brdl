@@ -9,6 +9,8 @@ const userController = require('./controllers/userController');
 const geoController = require('./controllers/geoController');
 const birdController = require('./controllers/birdController');
 const cookieController = require('./controllers/cookieController')
+const sessionController = require('./controllers/sessionController')
+const session = require('express-session')
 
 app.use(express.json()); // replaces body-parser
 app.use(express.urlencoded({ extended: true })); // Helps parse different data types
@@ -28,11 +30,16 @@ app.get('/gainAccess', userController.auth, (req, res) => {
 
 app.use(cookieParser());
 
+
 // Account creation
 // mw will return a boolean
 // if false, res.send('Account creation failed')
 // else, direct user to profile page
-app.post('/gainAccess', userController.create, cookieController.setSSIDCookie, (req, res) => {
+app.post('/gainAccess',
+  userController.create,
+  // cookieController.setSSIDCookie,
+  // sessionController.startSession,
+  (req, res) => {
   res.set('Access-Control-Allow-Origin', ' * ');
   res.set('Content-Type', 'application/json');
 
