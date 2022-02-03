@@ -43,7 +43,7 @@ body {
   /* padding: 0; */
 }
 
-.nav-bar-container {
+/* .nav-bar-container {
   display: flex;
   justify-content: space-between;
   padding: 16px 20px;
@@ -52,7 +52,7 @@ body {
   position: sticky;
   top: 0;
   align-items: center;
-}
+} */
 
 .nav-logo {
   width: 50px;
@@ -98,9 +98,6 @@ body {
   width: 675px;
   margin: 0 auto;
   margin-top: 100px;
-  border: #261803 solid 3px;
-  border-radius: 10px;
-  box-shadow: 3px 3px 8px 1px #2618033b;
 }
 
 header {

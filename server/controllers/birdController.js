@@ -1,7 +1,7 @@
 const { query } = require('express');
 const db = require('../models/brdlModels');
 const axios = require('axios');
-const tokens = require('../tokens/tokens');
+const tokens = require('../tokens/keys');
 
 const birdController = {};
 
@@ -15,6 +15,8 @@ birdController.nearby = async (req, res, next) => {
         const apiResponse = await axios.get(`https://api.ebird.org/v2/data/obs/geo/recent?lat=${lat}&lng=${long}&maxResults=5`, {
             headers: { "x-ebirdapitoken": tokens.eBirdToken },
            })
+        console.log(apiResponse);
+        console.log(Object.keys(apiResponse));
         const newBirdList = apiResponse.data.map(bird => ({
             sciName: bird.sciName,
             comName: bird.comName,
@@ -29,7 +31,7 @@ birdController.nearby = async (req, res, next) => {
             try { await db.query(queryString, [bird.sciName, bird.comName]) }
             catch (err) {
                 console.log('Cannot insert bird into Birds table');
-                console.log(err);
+                console.log(err.error);
             }
         })
 
