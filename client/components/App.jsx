@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions/actions.js';
 import SignUp from './SignUp.jsx';
@@ -6,6 +6,7 @@ import Login from './Login.jsx';
 import Navbar from './NavBar.jsx';
 import CommunityContainer from '../containers/CommunityContainer.jsx';
 import ProfileContainer from '../containers/ProfileContainer.jsx';
+import fetch from 'node-fetch';
 
 const mapStateToProps = state => ({
   page: state.navigation.page,
@@ -19,10 +20,16 @@ const mapDispatchToProps = dispatch => ({
   changePageActionCreator: page => dispatch(actions.changePageActionCreator(page)),
 });
 
+const getAuth = async (url) => {
+  const data = await fetch
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
   }
+
+
 
   render() {
     const display = [];
