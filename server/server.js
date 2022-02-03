@@ -37,8 +37,8 @@ app.use(cookieParser());
 // else, direct user to profile page
 app.post('/gainAccess',
   userController.create,
+  sessionController.startSession,
   // cookieController.setSSIDCookie,
-  // sessionController.startSession,
   (req, res) => {
   res.set('Access-Control-Allow-Origin', ' * ');
   res.set('Content-Type', 'application/json');

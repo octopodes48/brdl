@@ -38,7 +38,7 @@ userController.auth = async (req, res, next) => {
 // else set res.locals.auth to false if username already exists
 userController.create = async (req, res, next) => {
   console.log('in usercontroller create');
-  console.log('req.query', req.query)
+  // console.log('req.query', req.query)
   let { fullName, username: clientUsername, password: clientPassword } = req.query;
     // $1: fullName, $2: username: clientUsername, $3: password: clientPassword
   try {
@@ -51,23 +51,35 @@ userController.create = async (req, res, next) => {
       return next();
     } else {
       const saltRounds = 15;
-        await bcrypt.hash(clientPassword, saltRounds, (err, hash) => {
-          const queryString = 'INSERT INTO Users (name, username, password) VALUES ($1, $2, $3)';
-          const queryResult = db.query(queryString, [fullName, clientUsername, hash]);
+        // console.log('got here?')
+      const hashPW = await bcrypt.hash(clientPassword, saltRounds)
+        
+      clientPassword = hashPW
 
-          res.locals.auth = { valid: true };
-          res.locals.user = {username: clientUsername}
-          return next()
+      console.log(clientPassword)
+      const queryString = 'INSERT INTO Users (name, username, password) VALUES ($1, $2, $3)';
+      const queryResult = await db.query(queryString, [fullName, clientUsername, clientPassword]);
         
-        }
+        // const hashPW = await bcrypt.hash(clientPassword, saltRounds, (err, hash) => {
+        //     if (err) return next(err)
+        //     const queryString = 'INSERT INTO Users (name, username, password) VALUES ($1, $2, $3)';
+        //     const queryResult = db.query(queryString, [fullName, clientUsername, hash]);
+
+        //     res.locals.auth = { valid: true };
+        //     res.locals.user = {username: clientUsername}
+        //     // console.log('finished hashing')
+        //     return next();
+        // })
         
-        )
-      // res.locals.auth = { valid: true };
-      // console.log('account succcessfully made');
-      // return next();
- 
+   
+      
+      res.locals.auth = { valid: true };
+      console.log('account successfully made');
+      res.locals.user = {username: clientUsername}
+      return next();
     }
-  } catch (err) {
+  }
+  catch (err) {
     return next({
       log: `Express error handler caught in userController.create: ${err.message}`,
       status: 500,
@@ -77,4 +89,3 @@ userController.create = async (req, res, next) => {
 };
 
 module.exports = userController;
-

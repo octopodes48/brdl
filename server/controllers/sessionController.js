@@ -5,9 +5,11 @@ const sessionController = {};
 
 
 
-sessionController.startSession = (req, res, next) => {
-  const queryString = 'INSERT INTO seessions (name) VALUE ($1)'
-  const queryResult = db.query(queryString, [res.locals.user.username])
+sessionController.startSession = async (req, res, next) => {
+  console.log('local', res.locals)
+  const queryString = 'INSERT INTO sessions (username) VALUES ($1)'
+  const queryResult = await db.query(queryString, [res.locals.user.username])
+  return next()
 }
 
 module.exports = sessionController
