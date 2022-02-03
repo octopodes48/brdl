@@ -45,8 +45,11 @@ export const handleAccountSubmit = (e) => (dispatch, getState) => {
   } else {  // Should the second username be password?
     fetch(`http://localhost:3000/gainAccess/?username=${username}&password=${password}&fullName=${fullName}`, {
         method: 'POST',
-        header: { 'Access-Control-Allow-Origin': ' * ', 'Content-Type': 'application/json' },
-    })
+        header: { 'Access-Control-Allow-Origin' : ' http://localhost:8080 ', 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials' : 'true' },
+        credentials: "include"
+    }) // BUAHAHAHAHAHAHAHAHAHAHA
+    // WHY ARE YOU HERE!
+    // BOO HISS!
       .then(res => res.json())
       .then(data => {
         if (data.valid) dispatch(changeToProfilePageActionCreator());
@@ -61,6 +64,7 @@ export const handleAccountLogin = (e) => (dispatch, getState) => {
   const mode = getState().responses.mode;
   const { username, password } = getState().textField;
 
+  // if (this.props.mode === 'dev') {
   if (mode === 'dev') {
     if (valid) dispatch(changeToProfilePageActionCreator());
     else dispatch(loginSubmitActionCreator());
@@ -68,9 +72,11 @@ export const handleAccountLogin = (e) => (dispatch, getState) => {
     fetch(`http://localhost:3000/gainAccess/?username=${username}&password=${password}`, {
       method: 'GET',
       header: {
-        'Access-Control-Allow-Origin': ' * ',
+        'Access-Control-Allow-Origin': ' http://localhost:8080 ',
+        'Access-Control-Allow-Credentials' : 'true',
         'Content-Type': 'application/json',
         Accept: 'application/json', // string? necessary?
+        credentials: 'include'
       },
     })
       .then(res => res.json())
@@ -79,6 +85,7 @@ export const handleAccountLogin = (e) => (dispatch, getState) => {
         else dispatch(loginSubmitActionCreator());
       });
   }
+
 }
 
 export const changeToSignUpPageActionCreator = () => ({
