@@ -1,6 +1,5 @@
 // import path from 'path';
 import React, { Component } from 'react';
-
 import LogoIcon from '../../assets/img/brdl-logo-2-b.png';
 import LogoText from '../../assets/img/brdl-logo-2-c.png';
 import * as actions from '../actions/actions.js';
@@ -58,11 +57,11 @@ class NavBar extends Component {
     } else {
       display.push(
         <Grid sx={{ alignItems: 'center' }}>
-          <Button 
+          {/* <Button 
             onClick={() => this.props.changePageActionCreator('community')} 
             sx={{ color: theme.palette.primary.dark, mx: .5 }} variant="text">
             Community
-          </Button>
+          </Button> */}
           <Button 
             onClick={() => this.props.changePageActionCreator('profile')} 
             sx={{ color: theme.palette.primary.dark }} 

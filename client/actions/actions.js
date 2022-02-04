@@ -33,8 +33,7 @@ export const fullNameChangeActionCreator = e => ({
   payload: e,
 });
 
-export const handleAccountSubmit = (e) => (dispatch, getState) => {
-  // e.preventDefault();
+export const handleAccountSubmit = () => (dispatch, getState) => {
   const mode = getState().responses.mode;
   const valid = getState().responses.signUpPost.valid;
   const { username, password, fullName } = getState().textField;
@@ -45,11 +44,9 @@ export const handleAccountSubmit = (e) => (dispatch, getState) => {
   } else {  // Should the second username be password?
     fetch(`http://localhost:3000/gainAccess/?username=${username}&password=${password}&fullName=${fullName}`, {
         method: 'POST',
-        header: { 'Access-Control-Allow-Origin' : ' http://localhost:8080 ', 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials' : 'true' },
+        header: { 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials' : 'true' },
         credentials: "include"
-    }) // BUAHAHAHAHAHAHAHAHAHAHA
-    // WHY ARE YOU HERE!
-    // BOO HISS!
+    })// 'Access-Control-Allow-Origin' : ' http://localhost:8080 ',
       .then(res => res.json())
       .then(data => {
         if (data.valid) dispatch(changeToProfilePageActionCreator());
@@ -59,7 +56,7 @@ export const handleAccountSubmit = (e) => (dispatch, getState) => {
   }
 }
 
-export const handleAccountLogin = (e) => (dispatch, getState) => {
+export const handleAccountLogin = () => (dispatch, getState) => {
   const valid = getState().responses.loginGet.valid;
   const mode = getState().responses.mode;
   const { username, password } = getState().textField;
@@ -72,7 +69,7 @@ export const handleAccountLogin = (e) => (dispatch, getState) => {
     fetch(`http://localhost:3000/gainAccess/?username=${username}&password=${password}`, {
       method: 'GET',
       header: {
-        'Access-Control-Allow-Origin': ' http://localhost:8080 ',
+        // 'Access-Control-Allow-Origin': ' http://localhost:8080 ',
         'Access-Control-Allow-Credentials' : 'true',
         'Content-Type': 'application/json',
         Accept: 'application/json', // string? necessary?
@@ -83,9 +80,30 @@ export const handleAccountLogin = (e) => (dispatch, getState) => {
       .then(data => {
         if (data.valid) dispatch(changeToProfilePageActionCreator());
         else dispatch(loginSubmitActionCreator());
-      });
+      })
+      .catch(err => { console.log(err) });
   }
+}
 
+export const getLeaders = () => (dispatch) => {
+  fetch('http://localhost:3000/getLeaders/', {
+    method: 'GET',
+    header: {
+      // 'Access-Control-Allow-Origin': ' http://localhost:8080 ',
+      'Access-Control-Allow-Credentials' : 'true',
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      credentials: 'include'
+    },
+  })
+  .then((data) => data.json())
+  .then((data) => {
+    dispatch({
+      type: types.GET_LEADERS,
+      payload: data.leaders,
+    });
+  })
+  .catch((err) => { console.log(err) })
 }
 
 export const changeToSignUpPageActionCreator = () => ({
@@ -143,12 +161,13 @@ export const newSeenBird = (bird) => (dispatch, getState) => {
 
     fetch(`http://localhost:3000/profile?username=${username}&lat=${lat}&long=${long}&sciBirdName=${bird} `, {
       method: 'POST',
-      header: { 'Access-Control-Allow-Origin': ' * ', 'Content-Type': 'application/json' },
-    })
+      header: { 'Content-Type': 'application/json' },
+    }) // 'Access-Control-Allow-Origin': ' * ',
       .then(data => data.json())
       .then(data => {
         if ('sciName' in data) {
           seenBirds.push({ sciName: data.sciName, timeStamp: data.timeStamp });
+          console.log(seenBirds);
           dispatch(updateSeenBirdsActionCreator(seenBirds));
         } else console.log('Failed to update on the back end');
       })
@@ -167,15 +186,15 @@ export const getBirds = (locInfo) => (dispatch, getState) => {
   } else if (mode === 'prod') {
     fetch(`http://localhost:3000/profile?username=${username}&lat=${lat}&long=${long}`, {
       method: 'GET',
-      header: { 'Access-Control-Allow-Origin': ' * ', 'Content-Type': 'application/json' },
-    })
+      header: {  'Content-Type': 'application/json' },
+    }) // 'Access-Control-Allow-Origin': ' * ',
       .then(data => data.json())
       .then(data => {
-        console.log(data);
         data.seenBirds.forEach(bird => bird.sciName = bird.scientific_name);
         if (data.seenBirds.length) {
-          dispatch(updateSeenBirdsActionCreator(data.seenBirds.slice()));
-        } else dispatch(updateLocalBirdsActionCreator(data.birds.slice()));
+          dispatch(updateSeenBirdsActionCreator(data.seenBirds));
+        }
+        dispatch(updateLocalBirdsActionCreator(data.birds));
       //   dispatch(updateSeenBirdsActionCreator(getState().responses.testSeenBirds));
       // } else dispatch(updateLocalBirdsActionCreator(getState().responses.testLocalBirds));
       })

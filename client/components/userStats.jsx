@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions/actions.js';
-import { Button, Card, CardActionArea, Container, Paper, TextField, ThemeProvider, Typography, Slide } from '@mui/material';
+import { Box, Button, Card, CardActionArea, Container, Grid, Paper, TextField, ThemeProvider, Typography, Slide } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 
 const mapStateToProps = state => ({
@@ -65,15 +65,21 @@ class UserStats extends Component {
         }, {});
 
       let seenBirdsInThisArea = 0;
+      console.log('local birds arrays?', this.props.localBirds)
+      console.log('seen birds arrays?', this.props.seenBirds)
 
       this.props.localBirds.forEach((bird, i) => {
         let seen = 'Has not been seen.';
-        const birdSeen = bird.sciName in seenBirdNames;
-        if (birdSeen) {
+        console.log('local bird:', bird.sciName);
+        console.log(bird);
+        console.log(seenBirdNames);
+        // const birdSeen = bird.sciName in seenBirdNames;
+        if (seenBirdNames[bird.sciName]) {
+          console.log('seen bird name', bird.sciName);
           seenBirdsInThisArea++;
           seen = 'Has been seen.';
           display.push(
-            <Card sx={{ my: .5 }}>
+            <Card sx={{ my: .25, bgcolor: "#fff9ee" }}>
               <Typography variant="h6" className="bird-info" key={`cM${i}`} sx={{ textAlign: "center", mt: .5, mb: -.3, fontWeight: "bold"}}>{bird.comName}</Typography>
               <Typography variant="body1" key={`cS${i}`} sx={{ textAlign: "center", fontStyle: "italic", mb: .3, }}>{bird.sciName}</Typography>
               <Button key={`key${i}`} fullWidth>
@@ -83,35 +89,26 @@ class UserStats extends Component {
           );
         } else {
           display.push(
-            <Card sx={{ my: .5 }}>
+            <Card sx={{ my: .25, bgcolor: "#fff9ee" }}>
                 <Typography variant="h6" className="bird-info" key={`cM${i}`} sx={{ textAlign: "center", mt: .5, mb: -.3, fontWeight: "bold"}}>{bird.comName}</Typography>
                 <Typography variant="body1" key={`cS${i}`} sx={{ textAlign: "center", fontStyle: "italic", mb: .3, }}>{bird.sciName}</Typography>
-                <Button key={`key${i}`} onClick={e => this.props.newSeenBird(bird.sciName)} fullWidth>
+                <Button key={`key${i}`} onClick={e => { console.log(e.target.innerText = "SEEN"); this.props.newSeenBird(bird.sciName) }} fullWidth>
                   Mark as seen
                 </Button>
             </Card>
           );
         }
-        // if (!birdSeen)
-        //   display.push(
-        //     <Button key={`key${i}`} onClick={e => this.props.newSeenBird(bird.sciName)}>
-        //       I saw {bird.comName}!
-        //     </Button>
-        //   );
       });
-
-      display.unshift(
-        <Typography className="seen-birds-header" key="h2US">
-          {`You have seen ${totalSeenBirds}.\nYou have seen ${seenBirdsInThisArea} out of ${totalBirdsInArea} in the area`}
-        </Typography>
-      );
-    } else display.push(<h1 key="oops">Error with localBirds</h1>);
+    } //else display.push(<h1 key="oops">Error with localBirds</h1>);
 
     return (
       <ThemeProvider theme={theme}>
-        {display}
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
+          {display}
+        </Box>
       </ThemeProvider>
     );
+  
   }
 }
 

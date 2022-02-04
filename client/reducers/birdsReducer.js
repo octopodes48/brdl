@@ -2,7 +2,8 @@ import * as types from '../constants/actionTypes';
 
 const initialState = {
   seenBirds: [],
-  localBirds: []
+  localBirds: [],
+  leaderBoard: [],
 };
 
 const birdsReducer = (state = initialState, action) => {
@@ -10,18 +11,23 @@ const birdsReducer = (state = initialState, action) => {
 
   switch (action.type) {
     case types.UPDATE_SEEN_BIRDS:
+      console.log('in birds reducer', action.payload);
       return {
         ...state,
         seenBirds: action.payload,
       };
 
     case types.UPDATE_LOCAL_BIRDS:
-      console.log(action.payload)
       return {
         ...state,
         localBirds: action.payload,
       };
 
+    case types.GET_LEADERS:
+      return {
+        ...state,
+        leaderBoard: action.payload,
+      }
     default:
       return state;
   }

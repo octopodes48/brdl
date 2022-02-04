@@ -56,8 +56,10 @@ birdController.nearby = async (req, res, next) => {
 };
 
 // POST -- when user clicks on a bird they have seen in the area, client will provide username, lat/long, timeStamp, commBirdName, sciBirdName
-// querey database to insert bird into the database
+// query database to insert bird into the database
 birdController.seen = async (req, res, next) => {
+    console.log('in birdController', req.query);
+
     try {
         const { username, sciBirdName } = req.query;
         sciBirdName.split('_').join(' ');
@@ -83,6 +85,23 @@ birdController.seen = async (req, res, next) => {
         });
     }
 };
+
+birdController.leaders = async (req, res, next) => {
+    
+    try {
+        const queryString = 'SELECT username, COUNT(*) AS seen FROM seen_birds GROUP BY username ORDER BY seen DESC LIMIT 5';
+        const leaders = await db.query(queryString);
+        res.locals.leaders = leaders.rows;
+        return next();
+    }
+    catch (err) {
+        return next({
+            log: `Express error handler caught in birdController.leaders: ${err.message}`,
+            status: 500,
+            message: { err: 'Express error handler caught in birdController.leaders' }
+        });
+    }
+}
 
 //   const queryString = `INSERT INTO Birds (scientific_name, common_name) VALUES ($1, $2)`
 // const queryResult = await db.query(queryString, [newBirdList.sciName,  ]);
