@@ -88,6 +88,17 @@ app.post('/profile',
     res.status(200).json(res.locals.seen);
 })
 
+app.get('/getLeaders',
+  birdController.leaders,
+  (req, res) => {
+    res.set('Access-Control-Allow-Origin', ' http://localhost:8080 ');
+    res.set('Access-Control-Allow-Credentials: true');
+    res.set('Content-Type', 'application/json');
+
+    res.status(200).json(res.locals);
+  }
+)
+
 // Local error handler (404/missing routes)
 app.use('*',
   (req, res) => {

@@ -17,11 +17,16 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   resetFieldsActionCreator: () => dispatch(actions.resetFieldsActionCreator()),
   changePageActionCreator: page => dispatch(actions.changePageActionCreator(page)),
+  getLeaders: () => dispatch(actions.getLeaders())
 });
 
 class App extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentDidMount() {
+    this.props.getLeaders();
   }
 
   render() {
