@@ -1,5 +1,10 @@
 import * as types from '../constants/actionTypes.js';
 
+export const setFullnameLoginActionCreator = value => ({
+  type: types.SET_FULLNAME_LOGIN,
+  payload: value
+})
+
 export const changePageActionCreator = pl => ({
   type: types.CHANGE_PAGE,
   payload: pl,
@@ -59,6 +64,36 @@ export const handleAccountSubmit = (e) => (dispatch, getState) => {
   }
 }
 
+// ATTEMPT AT NOT SHOWING SENSITIVE INFO IN URL DURING SIGNUP
+// export const handleAccountSubmit = (event) => (dispatch, getState) => {
+//   // this.setState({...state, username: event.target[0].value, password: event.target[1].value, fullName: event.target[2].value})
+
+//   const mode = getState().responses.mode;
+//   const valid = getState().responses.signUpPost.valid;
+//   const { username, password, fullName } = getState().textField;
+//   const newUserState = {...getState().textfield, username: event.target[0].value, password: event.target[1].value, fullName: event.target[2].value}
+
+//   if (mode === 'dev') {
+//     if (valid) dispatch(changeToProfilePageActionCreator());
+//     else dispatch(createAccountSubmitActionCreator());
+//   }
+  
+//   else {  // Should the second username be password?
+//     fetch('http://localhost:3000/gainAccess', {
+//         method: 'POST',
+//         header: { 'Access-Control-Allow-Origin' : ' http://localhost:8080 ', 'Content-Type': 'application/json', 'Access-Control-Allow-Credentials' : 'true' },
+//         credentials: "include",
+//         body: { username, password, fullName }
+//     }
+//       .then(res => res.json())
+//       .then(data => {
+//         if (data.valid) dispatch(changeToProfilePageActionCreator());
+//         else dispatch(createAccountSubmitActionCreator());
+//       })
+//       .catch((err) => { console.log(err) })
+//     )}
+// }
+
 export const handleAccountLogin = (e) => (dispatch, getState) => {
   const valid = getState().responses.loginGet.valid;
   const mode = getState().responses.mode;
@@ -76,12 +111,15 @@ export const handleAccountLogin = (e) => (dispatch, getState) => {
         'Access-Control-Allow-Credentials' : 'true',
         'Content-Type': 'application/json',
         Accept: 'application/json', // string? necessary?
-        credentials: 'include'
       },
+      credentials: 'include'
     })
       .then(res => res.json())
       .then(data => {
-        if (data.valid) dispatch(changeToProfilePageActionCreator());
+        if (data.valid) {
+          dispatch(setFullnameLoginActionCreator(data.fullName));
+          dispatch(changeToProfilePageActionCreator());
+        }
         else dispatch(loginSubmitActionCreator());
       });
   }
@@ -183,4 +221,10 @@ export const getBirds = (locInfo) => (dispatch, getState) => {
   } else console.log('Mode must be prod or dev in ./client/reducers/responsesReducer.js');
 }
 
+
+
 // export default login;
+
+
+
+

@@ -6,7 +6,8 @@ import Login from './Login.jsx';
 import Navbar from './NavBar.jsx';
 import CommunityContainer from '../containers/CommunityContainer.jsx';
 import ProfileContainer from '../containers/ProfileContainer.jsx';
-import fetch from 'node-fetch';
+import 'regenerator-runtime';
+import axios from 'axios';
 
 const mapStateToProps = state => ({
   page: state.navigation.page,
@@ -18,19 +19,38 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   resetFieldsActionCreator: () => dispatch(actions.resetFieldsActionCreator()),
   changePageActionCreator: page => dispatch(actions.changePageActionCreator(page)),
+  changeToProfile: () => dispatch(actions.changeToProfilePageActionCreator()),
+  setFullnameLogin: value => dispatch(actions.setFullnameLoginActionCreator(value))
 });
 
-const getAuth = async (url) => {
-  const data = await fetch(url)
+
+const authOnRender = async (url) => {
+
+  const data = await axios.get(url, { withCredentials: true })
   return data
+
 }
+
+
 
 class App extends Component {
   constructor(props) {
     super(props);
   }
 
+componentDidMount() {
+  authOnRender('/auth')
+  .then((res) => {
+    if (res.data.valid === true) {
+    this.props.setFullnameLogin(res.data.username)
+    this.props.changeToProfile()
+    console.log(this.props.page)
+    
+    }
+    console.log(res.data)
 
+  })
+}
 
   render() {
     const display = [];

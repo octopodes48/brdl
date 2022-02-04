@@ -105,6 +105,13 @@ const textFieldReducer = (state = initialState, action) => {
         // fullName: '',
       };
 
+      case types.SET_FULLNAME_LOGIN:
+        return {
+          ...state,
+          fullName: action.payload
+        }
+
+
     default:
       return state;
   }

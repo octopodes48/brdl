@@ -23,9 +23,19 @@ app.use(cors(corsOptions))
 app.use(express.json()); // replaces body-parser
 app.use(express.urlencoded({ extended: true })); // Helps parse different data types
 
+app.use(cookieParser());
 
 
+app.get('/auth',
+  cookieController.auth,
+  (req, res) => {
+    res.set('Access-Control-Allow-Origin', ' http://localhost:8080 ');
+    res.set('Access-Control-Allow-Credentials: true');
+    res.set('Content-Type', 'application/json');
 
+    res.status(200).json(res.locals.auth)
+
+  })
 
 // handle GET & POST requests to /gainAccess
 
@@ -35,15 +45,16 @@ app.use(express.urlencoded({ extended: true })); // Helps parse different data t
 // else, direct user to the profile page
 app.get('/gainAccess',
   userController.auth,
+  sessionController.loginSession,
+  cookieController.setSSIDCookie,
   (req, res) => {
     res.set('Access-Control-Allow-Origin', ' http://localhost:8080 ');
     res.set('Access-Control-Allow-Credentials: true');
     res.set('Content-Type', 'application/json');
 
-    res.status(200).json(res.locals.auth);
+    return res.status(200).json(res.locals.auth);
 });
 
-app.use(cookieParser());
 
 
 // Account creation
@@ -59,9 +70,10 @@ app.post('/gainAccess',
     res.set('Access-Control-Allow-Credentials: true');
     res.set('Content-Type', 'application/json');
     // res.set('header')
-    // res.setHeader('Set-Cookie', 'cookie=value');
-    
-    // res.cookie('ssid', res.locals.rows[0].sessionid, {httpOnly: true, secure: true})
+    // res.setHeader('Set-Cookie', `cookie=${res.locals.uuid.rows[0].sessionid}`);
+
+   
+
     return res.status(200).json(res.locals.auth);
 });
 

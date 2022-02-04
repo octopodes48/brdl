@@ -8,26 +8,42 @@ const userController = {};
 // we will query the db using just the username and get the password from the db. if the db provided password matches client provided password, set res.locals.auth = true
 // else set res.locals.auth
 userController.auth = async (req, res, next) => {
-  const { username: clientUsername, password: clientPassword } = req.query;
-  console.log(req.query.password)
+  let { username: clientUsername, password: clientPassword } = req.query;
+  // console.log(req.query.password)
   
-  // const saltRounds = 15
-  // const inputPW = await bcrypt.hash(clientPassword, saltRounds)
-  // clientPassword = inputPW
+  
 
   try {
+    console.log('did it go in here', clientPassword)
+
     const queryString = 'SELECT * FROM Users WHERE username=$1';
     const queryResult = await db.query(queryString, [clientUsername]);
-    if (!queryResult.rows.length || queryResult.rows[0].password !== clientPassword) {
+
+    console.log(queryResult.rows[0].password, clientPassword)
+
+    // NEED TO QUERY DATABASE FIRST TO OBTAIN USER PASSWORD, THEN COMPARE WITH BCRYPT
+    bcrypt.compare(clientPassword, queryResult.rows[0].password, (err, isMatch) => {
+      if (err) return next({
+        log: 'ERROR with bcrypt.compare'
+      })
+      else if (!isMatch) {
+      console.log('NO MATCH')
       console.log(`Auth failed using username: ${clientUsername} and password: ${clientPassword}`);
       res.locals.auth = { valid: false };
+      res.locals.user = {username: clientUsername}
       return next();
-    } else {
-      res.locals.auth = { valid: true, fullName: queryResult.rows[0].name };
-      // console.log(`Auth success using username: ${clientUsername} and password: ${clientPassword}`);
-      // console.log('Successfully logged in.');
-      return next();
-    }
+      }
+      else {
+        console.log('MATCH')
+        res.locals.auth = { valid: true, fullName: queryResult.rows[0].name };
+        console.log(`Auth success using username: ${clientUsername} and password: ${clientPassword}`);
+        console.log('Successfully logged in.');
+        res.locals.user = {username: clientUsername}
+        return next();
+      }
+    })
+
+
   } catch (err) {
     return next({
       log: `Express error handler caught in userController.auth: ${err.message}`,

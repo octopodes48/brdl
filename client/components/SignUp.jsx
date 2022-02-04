@@ -83,6 +83,36 @@ class SignUp extends Component {
                 variant="filled"
                 onChange={this.props.fullNameChangeActionCreator}
               />
+
+{/* ATTEMPT AT FIXING THE SIGNUP FOR SENSITIVE INFORMATION
+              <input
+                fullWidth
+                type="text"
+                id="username"
+                name="username"
+                label="Username"
+                margin="dense"
+                variant="filled">
+              </input>
+              <input
+                fullWidth
+                type="password"
+                id="password"
+                name="password"
+                label="Password"
+                margin="dense"
+                variant="filled">
+              </input>
+              <input
+                fullWidth
+                type="text"
+                id="full-name"
+                name="full-name"
+                label="Full Name"
+                margin="dense"
+                variant="filled">
+              </input> */}
+
             <Button 
               fullWidth
               className="create-account-btn" 
@@ -91,7 +121,8 @@ class SignUp extends Component {
               variant='contained' 
               margin="normal" 
               sx={{ my: 1, py: .4 }} 
-              onClick={e => this.props.handleAccountSubmit(e)}>
+              onClick={event => this.props.handleAccountSubmit(event)}>
+              {/* onClick={e => this.props.handleAccountSubmit(e)}> */}
               Create account
             </Button>
             {this.props.validUser === false ?
